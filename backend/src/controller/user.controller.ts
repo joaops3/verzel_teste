@@ -21,19 +21,35 @@ class UserController {
   }
 
   async create(req: Request, res: Response) {
-    const { name, password } = req.body;
+    const { name, password, admin } = req.body;
     if (!name) {
       res.status(422).json({message: "name required" });
     }
     if (!password) {
+      res.status(422).json({message: "password required" });
+    }
+    const user = await userService.create({ name, password, admin });
+    res.status(201).json({ data: {token: user.token, admin: user.admin} });
+  }
+
+  async login(req: Request, res: Response){
+    const {name, password} = req.body
+    if (!name) {
       res.status(422).json({message: "name required" });
     }
-    const user = await userService.create({ name, password });
-    res.status(201).json({ data: user });
+    if (!password) {
+      res.status(422).json({message: "password required" });
+    }
+    const user = await userService.login(name, password);
+    if(!user){
+      res.status(401).json({message: "invalid credentials" });
+      return
+    }
+    res.status(200).json({data: user });
   }
 
   async update(req: Request, res: Response) {
-    const { id } = req.body;
+    const { id } = req.params;
     if (!id) {
       res.status(400).json({message: "id required" });
     }

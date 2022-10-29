@@ -1,6 +1,7 @@
 import express, {Request, Response, ErrorRequestHandler} from "express"
 import path from "path"
 import userRoutes from "./route/userRoutes"
+import carRoutes from "./route/carRoutes"
 import cors from "cors"
 import dotenv from "dotenv"
 
@@ -15,10 +16,11 @@ server.use(cors())
 
 
 server.use(userRoutes)
+server.use(carRoutes)
 
 server.use((req: Request, res: Response) => {
     res.status(404)
-    res.json({error: "page not found"})
+    res.json({message: "page not found"})
 })
 
 
@@ -29,11 +31,11 @@ const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
     res.status(400);
   }
   if (err.message) {
-    res.json({ error: err.message });
+    res.json({ message: err.message });
   } else {
-    res.json({ error: "bad request" });
+    res.json({ message: "bad request" });
   }
 };
 server.use(errorHandler);
 
-server.listen(process.env.PORT || 3000);
+server.listen(process.env.PORT || 3000, ()=> {console.log(`server listening on http://localhost:${process.env.PORT}`)})
