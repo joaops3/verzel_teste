@@ -1,0 +1,27 @@
+@import "variables";
+@import "utils/default";
+@import "utils/mixins";
+
+
+//-------COMPONENTS
+@import "components/header";
+@import "components/footer";
+
+@import "components/banner";
+
+@import "components/form";
+
+@import "components/button";
+
+@import "components/loading";
+
+@import "components/table";
+
+@import "components/card";
+
+
+
+//-----------lib
+
+@import "bootstrap/dist/css/bootstrap.min.css";
+@import 'react-toastify/dist/ReactToastify.css';
