@@ -11,11 +11,11 @@ class UserController {
   async findOne(req: Request, res: Response) {
     const { id } = req.params;
     if (!id) {
-      res.status(400).json({message: "id required" });
+      return res.status(400).json({message: "id required" });
     }
     const user = await userService.findOne(id);
     if (!user) {
-      res.status(404).json({message: "user not found" });
+     return res.status(404).json({message: "user not found" });
     }
     res.status(200).json({ data: user });
   }
@@ -23,10 +23,10 @@ class UserController {
   async create(req: Request, res: Response) {
     const { name, password, admin } = req.body;
     if (!name) {
-      res.status(422).json({message: "name required" });
+      return res.status(400).json({message: "name required" });
     }
     if (!password) {
-      res.status(422).json({message: "password required" });
+      return res.status(400).json({message: "password required" });
     }
     const user = await userService.create({ name, password, admin });
     res.status(201).json({ data: {token: user.token, admin: user.admin} });
@@ -35,10 +35,10 @@ class UserController {
   async login(req: Request, res: Response){
     const {name, password} = req.body
     if (!name) {
-      return res.status(422).json({message: "name required" });
+      return res.status(400).json({message: "name required" });
     }
     if (!password) {
-      return res.status(422).json({message: "password required" });
+      return res.status(400).json({message: "password required" });
     }
     const user = await userService.login(name, password);
     if(!user){
@@ -50,7 +50,7 @@ class UserController {
   async update(req: Request, res: Response) {
     const { id } = req.params;
     if (!id) {
-      res.status(400).json({message: "id required" });
+      return res.status(400).json({message: "id required" });
     }
     const { name } = req.body;
     const user = await userService.update(id, { name });
@@ -60,11 +60,11 @@ class UserController {
   async delete(req: Request, res: Response) {
     const { id } = req.params;
     if (!id) {
-      res.status(400).json({message: "id required" });
+      return res.status(400).json({message: "id required" });
     }
     const user = await userService.findOne(id);
     if (!user) {
-      res.status(404).json({message: "user not found" });
+      return res.status(404).json({message: "user not found" });
     }
     await userService.delete(id)
     res.status(200).json({ data: {} });
