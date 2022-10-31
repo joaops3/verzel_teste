@@ -18,16 +18,20 @@ class CarService {
   }
 
   async create(createCar: ICar) {
-    const car = await db.car.create({ data: { name: createCar.name.trim(), brand: createCar.brand, model: createCar.model, price: Number(createCar.price), photo: { create: { url: createCar.photo! } } } });
+    createCar.name = createCar.name.toLowerCase().trim()
+    createCar.brand = createCar.brand.toLowerCase().trim()
+    const car = await db.car.create({ data: { name: createCar.name, brand: createCar.brand, model: createCar.model, price: Number(createCar.price), photo: { create: { url: createCar.photo! } } } });
     return car;
   }
 
-  async update(id: string, body: ICar) {
+  async update(id: string, newValues: ICar) {
     const photoToRemove = await db.photo.findFirst({where: {carId: id}})
-    if(photoToRemove){
+    if(photoToRemove &&newValues.photo){
       await unlink(`./public/${photoToRemove.url}`)
     }
-    const updatedCar = await db.car.update({ where: { id }, data: { name: body.name, brand: body.brand, model: body.model, price: Number(body.price), photo: { update: { url: body.photo } } } });
+   newValues.name =newValues.name.toLowerCase().trim()
+   newValues.brand =newValues.brand.toLowerCase().trim()
+    const updatedCar = await db.car.update({ where: { id }, data: { name:newValues.name, brand:newValues.brand, model:newValues.model, price: Number(newValues.price), photo: { update: { url:newValues.photo } } } });
     if(!updatedCar){
       return
     }
@@ -35,6 +39,10 @@ class CarService {
   }
 
   async delete(id: string) {
+    const photoToRemove = await db.photo.findFirst({where: {carId: id}})
+    if(photoToRemove){
+      await unlink(`./public/${photoToRemove.url}`)
+    }
     await db.photo.delete({ where: { carId: id } })
     const car = await db.car.delete({ where: { id } });
     return car;

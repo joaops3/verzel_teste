@@ -38,4 +38,4 @@ const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
 };
 server.use(errorHandler);
 
-server.listen(process.env.PORT || 3000, ()=> {console.log(`server listening on http://localhost:${process.env.PORT}`)})
+server.listen(process.env.PORT || 4000, ()=> {console.log(`server listening on http://localhost:${process.env.PORT}`)})

@@ -24,22 +24,22 @@ class CarController {
     const { name, model, brand, price } = req.body;
     const file = req.file as Express.Multer.File
     if (!name) {
-      res.status(422).json({ message: "name required" });
+      return res.status(422).json({ message: "name required" });
     }
     if (!model) {
-      res.status(422).json({ message: "model required" });
+      return res.status(422).json({ message: "model required" });
     }
     if (!brand) {
-      res.status(422).json({ message: "brand required" });
+      return res.status(422).json({ message: "brand required" });
     }
     if (!price) {
-      res.status(422).json({ message: "price required" });
+     return  res.status(422).json({ message: "price required" });
     }
     if (!file) {
-      res.status(422).json({ message: "photo required" });
+     return  res.status(422).json({ message: "photo required" });
     }
     const car = await carService.create({ name, model, brand, price, photo: file.filename });
-    res.status(201).json({ data: car });
+    res.status(201).json({ data: {} });
   }
 
   async update(req: Request, res: Response) {
@@ -53,18 +53,23 @@ class CarController {
       return res.status(404).json({ message: "car not found" });
       
     }
-    await carService.update(id, { ...req.body, photo: file.filename });
+    if(file){
+      await carService.update(id, { ...req.body, photo: file.filename });
+    }else{
+      await carService.update(id, { ...req.body});
+
+    }
     res.status(200).json({ data: {} });
   }
 
   async delete(req: Request, res: Response) {
     const { id } = req.params;
     if (!id) {
-      res.status(400).json({ message: "id required" });
+     return res.status(400).json({ message: "id required" });
     }
     const car = await carService.findOne(id);
     if (!car) {
-      res.status(404).json({ message: "car not found" });
+      return res.status(404).json({ message: "car not found" });
     }
     await carService.delete(id)
     res.status(200).json({ data: {} });

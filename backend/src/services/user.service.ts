@@ -22,6 +22,7 @@ class UserService {
     const hash = await bcrypt.hash(createUser.password, salt);
     createUser.password = hash
     createUser.admin = Boolean(createUser.admin)
+    createUser.name = createUser.name.toLowerCase()
     const user = await db.user.create({ data: createUser });
     const token = await generateToken({ id: user.id, email: user.name, admin: user.admin })
     return { token, admin: user.admin };

@@ -35,15 +35,14 @@ class UserController {
   async login(req: Request, res: Response){
     const {name, password} = req.body
     if (!name) {
-      res.status(422).json({message: "name required" });
+      return res.status(422).json({message: "name required" });
     }
     if (!password) {
-      res.status(422).json({message: "password required" });
+      return res.status(422).json({message: "password required" });
     }
     const user = await userService.login(name, password);
     if(!user){
-      res.status(401).json({message: "invalid credentials" });
-      return
+      return res.status(401).json({message: "invalid credentials" });
     }
     res.status(200).json({data: user });
   }
