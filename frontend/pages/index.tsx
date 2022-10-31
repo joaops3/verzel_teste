@@ -17,25 +17,26 @@ const Table = dynamic(()=> import("../components/table/Table"), {ssr: false})
 const Home: NextPage = () => {
   const {user} = useContext(AuthContext)
   const [data, setData] = useState<CarsInterface[]>([{} as CarsInterface]);
+  const [handleAtt, setHandleAtt] = useState(0)
   const [loading, setLoading] = useState<boolean>(true);
 
   
 
   const getCars = useCallback(async () => {
     CarsService().getAllCars().then((resp)=> {setData(resp.data.data); setLoading(false)}).catch((e) => {console.log(e)})
-  
-  }, []);
+    console.log("sa")
+  }, [handleAtt]);
 
   useEffect(() => {
     getCars();
-  }, [getCars]);
+  }, [getCars, handleAtt]);
 
   return (
     <>
       <Header fixed={true}></Header>
       <MainBanner></MainBanner>
       <Container>
-      {loading ?  <Loading></Loading>: <Table data={data} admin={user?.admin || false }></Table>}
+      {loading ?  <Loading></Loading>: <Table data={data} setHandleAtt={setHandleAtt} admin={user?.admin || false }></Table>}
       </Container>
       <Footer></Footer>
     </>

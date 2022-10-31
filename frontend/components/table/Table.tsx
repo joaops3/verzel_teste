@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import Cards from "./Card/Cards";
 import { CarsInterface } from "../../interfaces/interfaces";
-interface Props {
+import { Dispatch, SetStateAction } from "react";
+interface Props<T> {
   data: CarsInterface[] | undefined;
+  setHandleAtt: Dispatch<SetStateAction<T>>;
   admin: boolean;
 }
 
@@ -19,9 +21,7 @@ export function sortByPrice(a: any, b: any) {
   return 0;
 }
 
-const Table: React.FC<Props> = ({ data, admin }) => {
-  
-
+const Table: React.FC<Props<any>> = ({ data, admin, setHandleAtt }) => {
   useEffect(() => {}, [data]);
 
   return (
@@ -43,6 +43,7 @@ const Table: React.FC<Props> = ({ data, admin }) => {
                     brand={card.brand}
                     price={card.price}
                     photo={card.photo}
+                    setHandleAtt={setHandleAtt}
                   ></Cards>
                 );
               })}

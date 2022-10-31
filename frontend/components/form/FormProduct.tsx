@@ -1,16 +1,5 @@
-import React, { useState, useCallback } from "react";
-import {
-  Container,
-  Form,
-  Col,
-  Row,
-  Button,
-  Popover,
-  OverlayTrigger,
-  ProgressBar,
-  Table,
-  Image,
-} from "react-bootstrap";
+import React, { useState, useCallback, useEffect } from "react";
+import { Container, Form, Col, Row, Button, Popover, OverlayTrigger, ProgressBar, Table, Image } from "react-bootstrap";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { CarsInterface } from "../../interfaces/interfaces";
 import InputMask from "react-input-mask";
@@ -22,6 +11,7 @@ import { filesize } from "filesize";
 import { AiOutlineClose } from "react-icons/ai";
 import { onlyNumbers, removeSpecialCharacters } from "../../helpers/helpers";
 import { toast } from "react-toastify";
+import { useRouter } from "next/router";
 
 interface Props {
   operation: string;
@@ -29,6 +19,7 @@ interface Props {
 }
 
 interface IUploadedFiles {
+  file: any;
   key: string;
   preview: string;
   name: string;
@@ -40,9 +31,8 @@ interface IUploadedFiles {
 }
 
 const FormProduct: React.FC<Props> = ({ operation, data }) => {
-  const [amount, setAmount] = useState<string | undefined>("0");
   const [uploadedFiles, setUploadedFiles] = useState<IUploadedFiles[]>([]);
-
+  const route = useRouter();
   const {
     handleSubmit,
     getValues,
@@ -53,14 +43,12 @@ const FormProduct: React.FC<Props> = ({ operation, data }) => {
 
   const onDrop = useCallback((acceptedFiles: any) => {
     const newList = acceptedFiles.map((file: any) => ({
+      file,
       key: uniqueId(),
       preview: URL.createObjectURL(file),
       name: file.name,
       readableSize: filesize(file.size),
       url: null,
-      progress: 0,
-      error: null,
-      uploaded: false,
     }));
 
     setUploadedFiles((prev) => [...prev, ...newList]);
@@ -74,30 +62,72 @@ const FormProduct: React.FC<Props> = ({ operation, data }) => {
     },
   });
 
+  const updateFields = useCallback(() => {
+    if (operation !== "edit") return;
+    const { id } = route.query;
+    CarsService()
+      .getCarsId(id as string)
+      .then((resp) => {
+        setValue("name", resp.data.data.name);
+        setValue("brand", resp.data.data.brand);
+        setValue("model", resp.data.data.model);
+        setValue("price", resp.data.data.price);
+      })
+      .catch((e) => {
+        toast.error("ERROR");
+      });
+  }, [route.query]);
+
   const submit: SubmitHandler<CarsInterface> = (data) => {
-    let cloneData = Object.assign({photo: {url: ""}} as CarsInterface, data);
-    cloneData.price = Number(onlyNumbers(`${data.price}`))
-    //cloneData.photo.url = "dsd";
-    cloneData.model = removeSpecialCharacters(cloneData.model)
+    let cloneData = Object.assign({} as CarsInterface, data);
 
-    const formData = new FormData()
-    
-    formData.append("photo", uploadedFiles[0].name)
-    formData.append("name", data.name)
-    formData.append("model", cloneData.model)
-    formData.append("brand", cloneData.brand)
-    //@ts-ignore
-    formData.append("price", cloneData.price)
+    cloneData.name = removeSpecialCharacters(cloneData.name);
+    cloneData.brand = removeSpecialCharacters(cloneData.brand);
+    cloneData.model = removeSpecialCharacters(cloneData.model);
+    cloneData.price = onlyNumbers(`${data.price}`);
+    cloneData.model = removeSpecialCharacters(cloneData.model);
 
-     CarsService() 
-      .setCars(formData)
-      .then((response) => {toast.success("Carro cadastrado com sucesso")})
-      .catch((e) => {toast.error(e)});
+    const formData = new FormData();
+    formData.append("photo", uploadedFiles[0].file);
+    formData.append("name", data.name);
+    formData.append("model", cloneData.model);
+    formData.append("brand", cloneData.brand);
+    formData.append("price", cloneData.price);
+
+    if (operation === "sign") {
+      CarsService()
+        .setCars(formData)
+        .then((resp) => {
+          toast.success("Carro cadastrado com sucesso");
+          setValue("name", "");
+          setValue("brand", "");
+          setValue("model", "");
+          setValue("price", "");
+        })
+        .catch((e) => {
+          toast.error("ERROR");
+        });
+    } else if (operation === "edit") {
+      const { id } = route.query;
+      if (!id) return;
+      CarsService()
+        .updateCars(id as string, formData)
+        .then((resp) => {
+          toast.success("Carro atualizado com sucesso");
+        })
+        .catch((e) => {
+          toast.error("ERROR");
+        });
+    }
   };
 
   const handleDelete = (id: string) => {
     setUploadedFiles((prev) => prev.filter((item) => item.key != id));
   };
+
+  useEffect(() => {
+    updateFields();
+  }, [updateFields]);
 
   return (
     <>
@@ -105,7 +135,7 @@ const FormProduct: React.FC<Props> = ({ operation, data }) => {
         <Form
           className="bg-login p-4"
           onSubmit={handleSubmit(submit)}
-          encType="multipart/form-data"
+          //encType="multipart/form-data"
         >
           <Row>
             <Form.Group as={Col} md={6}>
@@ -130,11 +160,7 @@ const FormProduct: React.FC<Props> = ({ operation, data }) => {
                   )}
                   rules={{ required: "O nome é obrigatorio", maxLength: 50 }}
                 />
-                {errors?.name && (
-                  <Form.Text className="errorsMessage">
-                    {errors?.name.message}
-                  </Form.Text>
-                )}
+                {errors?.name && <Form.Text className="errorsMessage">{errors?.name.message}</Form.Text>}
               </Form.Group>
 
               <Form.Group as={Col} md={12}>
@@ -146,7 +172,7 @@ const FormProduct: React.FC<Props> = ({ operation, data }) => {
                     <InputMask
                       type="brand"
                       mask="aaaaaaaaaa"
-                      maskChar={""}
+                      //maskChar={""}
                       className="input"
                       placeholder="Fabricante"
                       value={value}
@@ -156,11 +182,7 @@ const FormProduct: React.FC<Props> = ({ operation, data }) => {
                   )}
                   rules={{ required: "O brand é obrigatorio", maxLength: 40 }}
                 />
-                {errors.brand && (
-                  <Form.Text className="errorsMessage">
-                    {errors.brand?.message}
-                  </Form.Text>
-                )}
+                {errors.brand && <Form.Text className="errorsMessage">{errors.brand?.message}</Form.Text>}
               </Form.Group>
 
               <Form.Group as={Col} md={12}>
@@ -174,7 +196,7 @@ const FormProduct: React.FC<Props> = ({ operation, data }) => {
                       className={"input"}
                       type="text"
                       mask="9999"
-                      maskChar={""}
+                      //maskChar={""}
                       placeholder="Ano de fabricação"
                       value={value}
                       defaultValue={getValues("model")}
@@ -188,11 +210,7 @@ const FormProduct: React.FC<Props> = ({ operation, data }) => {
                     maxLength: 50,
                   }}
                 />
-                {errors?.model && (
-                  <Form.Text className="errorsMessage">
-                    {errors?.model.message}
-                  </Form.Text>
-                )}
+                {errors?.model && <Form.Text className="errorsMessage">{errors?.model.message}</Form.Text>}
               </Form.Group>
 
               <Form.Group as={Col} md={12}>
@@ -222,11 +240,7 @@ const FormProduct: React.FC<Props> = ({ operation, data }) => {
                   )}
                   rules={{ required: "O preço é obrigatorio", maxLength: 50 }}
                 />
-                {errors?.price && (
-                  <Form.Text className="errorsMessage">
-                    {errors?.price.message}
-                  </Form.Text>
-                )}
+                {errors?.price && <Form.Text className="errorsMessage">{errors?.price.message}</Form.Text>}
               </Form.Group>
             </Form.Group>
 
@@ -240,13 +254,7 @@ const FormProduct: React.FC<Props> = ({ operation, data }) => {
                       <tr key={index}>
                         {file.preview && (
                           <td>
-                       
-                            <Image
-                              src={file.preview}
-                              width={50}
-                              height={50}
-                              style={{ borderRadius: "5px" }}
-                            ></Image>
+                            <Image src={file.preview} width={50} height={50} style={{ borderRadius: "5px" }}></Image>
                           </td>
                         )}
 
@@ -256,10 +264,7 @@ const FormProduct: React.FC<Props> = ({ operation, data }) => {
                     !file.error &&(<ProgressBar now={100}></ProgressBar>)}
                      */}
                         <td onClick={(e) => handleDelete(file.key)}>
-                          <AiOutlineClose
-                            size={40}
-                            style={{ cursor: "pointer" }}
-                          ></AiOutlineClose>
+                          <AiOutlineClose size={40} style={{ cursor: "pointer" }}></AiOutlineClose>
                         </td>
                       </tr>
                     </>
@@ -272,11 +277,7 @@ const FormProduct: React.FC<Props> = ({ operation, data }) => {
             <Form.Group as={Col} md={6}>
               <div {...getRootProps()} className="drag">
                 <input {...getInputProps()} />
-                {isDragActive ? (
-                  <p>Arraste os arquivos</p>
-                ) : (
-                  <p>Click ou arraste os arquivos</p>
-                )}
+                {isDragActive ? <p>Arraste os arquivos</p> : <p>Click ou arraste os arquivos</p>}
               </div>
             </Form.Group>
           </Row>

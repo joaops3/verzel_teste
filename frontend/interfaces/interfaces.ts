@@ -3,7 +3,7 @@ export interface CarsInterface {
     name: string,
     model: string,
     brand: string,
-    price: number,
+    price: string,
     photo: photo
 }
 
