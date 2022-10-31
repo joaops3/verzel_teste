@@ -61,11 +61,7 @@ const FormUser: React.FC<Props> = ({ operation, currentData, id }) => {
   );
 
   const submit: SubmitHandler<UsersInterface> = async (data) => {
-    if(process.env.REACT_APP_ADMIN != "ADMIN") {
-      return
-    }
-
-    let dataClone = Object.assign({}, data);
+    let dataClone = Object.assign({}, data)
     
     if(operation ==="sign"){
       if (data.password !== passwordConfirmation) {
@@ -74,7 +70,7 @@ const FormUser: React.FC<Props> = ({ operation, currentData, id }) => {
       }
       setConfirmationError(false)
       await UserService().setUser(dataClone)
-        .then((res) => {navigate("/login");
+        .then((res) => {navigate.push("/login");
         setValue("name", "")
         setValue("password", "")
         setNascimento(null)

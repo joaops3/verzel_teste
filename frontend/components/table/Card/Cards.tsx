@@ -4,26 +4,32 @@ import Link from 'next/link'
 import { addMoneyRealMask } from '../../../helpers/helpers'
 import { CarsInterface } from '../../../interfaces/interfaces'
 import {BsFillPencilFill, BsFillTrashFill} from "react-icons/bs"
+import CarService from "../../../services/CarsService"
+import CarsService from '../../../services/CarsService'
+import {toast} from "react-toastify"
 interface Props extends CarsInterface {
  admin: boolean
 }
 
-const Cards: React.FC<Props> = ({name, model, brand ,price, photo, id, admin}) => {
+const Cards: React.FC<Props> = ({name, model, brand ,price, photo,id, admin}) => {
 
+  const handleDelete = (id: string) => {
+    CarsService().deleteCars(id).then((resp)=> {toast.success("Item deletado com sucesso")}).catch((e)=> {})
+  }
   return (
     <>
    
     <Card className=" p-2 m-1" style={{ width: '18rem' }}>
     {admin && ( 
        <div className="d-flex justify-content-end gap-3 mt-1 mb-3">
-        <Link href={``}>
+        <Link href={`/product/${id}/edit`}>
         <button className='header-login m-0 px-3 py-2 '><BsFillPencilFill size="20"/></button>
         </Link>
-        <Link href={``}>
-        <button className='header-cadastrar px-3 py-2'><BsFillTrashFill size="20"/></button>
-        </Link>
+       
+        <button className='header-cadastrar px-3 py-2' onClick={() => {handleDelete(id || "0" )}}><BsFillTrashFill size="20"/></button>
+  
         </div>) }
-      <Card.Img variant="top" src={`${photo}`} style={{maxHeight: "150px", minHeight: "150px"}} />
+      <Card.Img variant="top" src={`http://localhost:4000/${photo.url}`} style={{maxHeight: "150px", minHeight: "150px"}} />
       <Card.Body>
         <Card.Title className="card-text">{name}</Card.Title>
         <Card.Text>
@@ -33,7 +39,6 @@ const Cards: React.FC<Props> = ({name, model, brand ,price, photo, id, admin}) =
          {addMoneyRealMask(price) }
         </Card.Text>
         <Link href={`#`} className="btn-product">COMPRAR</Link>
-       
       </Card.Body>
     </Card>
     </>

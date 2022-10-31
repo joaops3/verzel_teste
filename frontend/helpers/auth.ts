@@ -20,8 +20,8 @@ export const setToken = (value: any) => {
   }
 }
 
-export const loginRequest = async (email:string, password: string) => {
-  let  data = { email, password}
+export const loginRequest = async (name:string, password: string) => {
+  let  data = { name, password}
   try{
     const request = await api.post("/login", data)
     return request.data

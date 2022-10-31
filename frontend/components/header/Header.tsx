@@ -17,7 +17,7 @@ const Header: React.FC<Props> = ({ fixed }) => {
   const [colorHeader, setColorHeader] = useState<boolean>(false);
   const [headerClass, setHeaderClass] = useState<string>("header");
   const [userid, setUserId] = useState(getToken);
-  const admin = true
+  
   const showHeader = () => {
     let top = window.innerHeight * 0.75;
 
@@ -37,7 +37,7 @@ const Header: React.FC<Props> = ({ fixed }) => {
     return () => {
       window.removeEventListener("scroll", showHeader);
     };
-  }, [userid]);
+  }, [userid, user]);
 
   return (
     <>
@@ -80,14 +80,14 @@ const Header: React.FC<Props> = ({ fixed }) => {
                 </Nav.Link>
               </Nav>
               <Nav>
-                {true ? (
+                {isLogged ? (
                   <>
-                    {admin && (
+                    {user?.admin && (
                       <Nav.Link
                         href={`/product/register`}
                         className="position-relative header-login"
                       >
-                        Cadastrar Veiculo
+                        Cadastrar Veículo
                       </Nav.Link>
                     )}
                     <NavDropdown

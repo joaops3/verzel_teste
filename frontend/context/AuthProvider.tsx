@@ -24,7 +24,7 @@ const AuthProvider: React.FC<Props> = ({children}) => {
     const data = await loginRequest(email, password)
     
     if(data){
-      setToken(data)
+      setToken(data.data)
       setIsLogged(true)
     }
     return data.id
@@ -37,12 +37,11 @@ const AuthProvider: React.FC<Props> = ({children}) => {
 
   useEffect(()=> {
     const user = getToken()
-   
     if(user){
       setUser(user)
       setIsLogged(true)
     }
-  }, [])
+  }, [isLogged])
 
   return (
    <AuthContext.Provider value={{isLogged, login, logout, user}}>

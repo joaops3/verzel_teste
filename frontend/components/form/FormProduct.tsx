@@ -68,27 +68,29 @@ const FormProduct: React.FC<Props> = ({ operation, data }) => {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    maxFiles: 5,
+    maxFiles: 1,
     accept: {
       "image/*": [".jpeg", ".jpg", ".png", ".svg", ".webp"],
     },
   });
 
   const submit: SubmitHandler<CarsInterface> = (data) => {
-    if (process.env.REACT_APP_ADMIN != "ADMIN") {
-      return;
-    }
-
-    const formdata = new FormData()
-    uploadedFiles.forEach((file)=> {formdata.append("carimg", file.key)})
-
-    let cloneData = Object.assign({}, data);
+    let cloneData = Object.assign({photo: {url: ""}} as CarsInterface, data);
     cloneData.price = Number(onlyNumbers(`${data.price}`))
-    cloneData.Carimgs = uploadedFiles;
+    //cloneData.photo.url = "dsd";
     cloneData.model = removeSpecialCharacters(cloneData.model)
-   
-     CarsService() //@ts-ignore
-      .setCars(cloneData)
+
+    const formData = new FormData()
+    
+    formData.append("photo", uploadedFiles[0].name)
+    formData.append("name", data.name)
+    formData.append("model", cloneData.model)
+    formData.append("brand", cloneData.brand)
+    //@ts-ignore
+    formData.append("price", cloneData.price)
+
+     CarsService() 
+      .setCars(formData)
       .then((response) => {toast.success("Carro cadastrado com sucesso")})
       .catch((e) => {toast.error(e)});
   };
@@ -111,16 +113,16 @@ const FormProduct: React.FC<Props> = ({ operation, data }) => {
                 <Form.Label>Name</Form.Label>
                 <Controller
                   control={control}
-                  name={"name_car"}
+                  name={"name"}
                   render={({ field: { onChange, value } }) => (
                     <InputMask
-                      id={"name_car"}
+                      id={"name"}
                       className={"input"}
                       type="text"
                       mask=""
                       placeholder="Nome"
                       value={value}
-                      defaultValue={getValues("name_car")}
+                      defaultValue={getValues("name")}
                       onChange={(e) => {
                         onChange(e);
                       }}
@@ -128,9 +130,9 @@ const FormProduct: React.FC<Props> = ({ operation, data }) => {
                   )}
                   rules={{ required: "O nome é obrigatorio", maxLength: 50 }}
                 />
-                {errors?.name_car && (
+                {errors?.name && (
                   <Form.Text className="errorsMessage">
-                    {errors?.name_car.message}
+                    {errors?.name.message}
                   </Form.Text>
                 )}
               </Form.Group>
@@ -138,24 +140,25 @@ const FormProduct: React.FC<Props> = ({ operation, data }) => {
               <Form.Group as={Col} md={12}>
                 <Form.Label>Fabricante</Form.Label>
                 <Controller
-                  name="model"
+                  name="brand"
                   control={control}
                   render={({ field: { onChange, value } }) => (
                     <InputMask
-                      type="model"
+                      type="brand"
                       mask="aaaaaaaaaa"
+                      maskChar={""}
                       className="input"
                       placeholder="Fabricante"
                       value={value}
-                      defaultValue={getValues("model")}
+                      defaultValue={getValues("brand")}
                       onChange={(e) => onChange(e)}
                     ></InputMask>
                   )}
-                  rules={{ required: "O model é obrigatorio", maxLength: 40 }}
+                  rules={{ required: "O brand é obrigatorio", maxLength: 40 }}
                 />
-                {errors.model && (
+                {errors.brand && (
                   <Form.Text className="errorsMessage">
-                    {errors.model?.message}
+                    {errors.brand?.message}
                   </Form.Text>
                 )}
               </Form.Group>
@@ -164,16 +167,17 @@ const FormProduct: React.FC<Props> = ({ operation, data }) => {
                 <Form.Label>Ano de Fabricação</Form.Label>
                 <Controller
                   control={control}
-                  name={"year"}
+                  name={"model"}
                   render={({ field: { onChange, value } }) => (
                     <InputMask
-                      id={"year"}
+                      id={"model"}
                       className={"input"}
                       type="text"
                       mask="9999"
+                      maskChar={""}
                       placeholder="Ano de fabricação"
                       value={value}
-                      defaultValue={getValues("year")}
+                      defaultValue={getValues("model")}
                       onChange={(e) => {
                         onChange(e);
                       }}
@@ -184,9 +188,9 @@ const FormProduct: React.FC<Props> = ({ operation, data }) => {
                     maxLength: 50,
                   }}
                 />
-                {errors?.year && (
+                {errors?.model && (
                   <Form.Text className="errorsMessage">
-                    {errors?.year.message}
+                    {errors?.model.message}
                   </Form.Text>
                 )}
               </Form.Group>
