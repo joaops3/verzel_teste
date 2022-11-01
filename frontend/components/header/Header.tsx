@@ -5,7 +5,7 @@ import { BiUserCircle } from "react-icons/bi";
 import { BsFillBasketFill } from "react-icons/bs";
 import Link from "next/link";
 import { AuthContext } from "../../context/AuthProvider";
-import { getToken } from "../../helpers/auth";
+import { getToken } from "../../services/auth";
 import Image from "next/image";
 
 interface Props {
@@ -17,7 +17,7 @@ const Header: React.FC<Props> = ({ fixed }) => {
   const [colorHeader, setColorHeader] = useState<boolean>(false);
   const [headerClass, setHeaderClass] = useState<string>("header");
   const [userid, setUserId] = useState(getToken);
-  
+
   const showHeader = () => {
     let top = window.innerHeight * 0.75;
 
@@ -49,23 +49,11 @@ const Header: React.FC<Props> = ({ fixed }) => {
         >
           <Container>
             <Navbar.Brand href="/">
-              <Image
-                src={"/images/logo.svg"}
-                width={150}
-                height={60}
-                alt="logo"
-              />
+              <Image src={"/images/logo.svg"} width={150} height={60} alt="logo" />
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="navbarScroll" />
-            <Navbar.Collapse
-              className={"justify-content-end"}
-              id="navbarScroll"
-            >
-              <Nav
-                className="nav-links me-auto my-2 my-lg-0"
-                style={{ maxHeight: "100px" }}
-                navbarScroll
-              >
+            <Navbar.Collapse className={"justify-content-end"} id="navbarScroll">
+              <Nav className="nav-links me-auto my-2 my-lg-0" style={{ maxHeight: "100px" }} navbarScroll>
                 <Nav.Link className={"links"} href="#action1">
                   Home
                 </Nav.Link>
@@ -83,10 +71,7 @@ const Header: React.FC<Props> = ({ fixed }) => {
                 {isLogged ? (
                   <>
                     {user?.admin && (
-                      <Nav.Link
-                        href={`/product/register`}
-                        className="position-relative header-login"
-                      >
+                      <Nav.Link href={`/product/register`} className="position-relative header-login">
                         Cadastrar Veículo
                       </Nav.Link>
                     )}

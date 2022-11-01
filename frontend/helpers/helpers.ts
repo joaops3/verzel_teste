@@ -90,3 +90,13 @@ export function sortByDate(a: any, b: any) {
   }
   return 0;
 }
+
+export function sortByPrice(a: any, b: any) {
+  if (a.price < b.price) {
+    return -1;
+  }
+  if (a.price > b.price) {
+    return 1;
+  }
+  return 0;
+}

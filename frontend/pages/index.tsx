@@ -24,7 +24,6 @@ const Home: NextPage = () => {
 
   const getCars = useCallback(async () => {
     CarsService().getAllCars().then((resp)=> {setData(resp.data.data); setLoading(false)}).catch((e) => {console.log(e)})
-    console.log("sa")
   }, [handleAtt]);
 
   useEffect(() => {

@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Button, Row } from "react-bootstrap";
+import { Card, Button, Row, Col } from "react-bootstrap";
 import Link from "next/link";
 import { addMoneyRealMask } from "../../../helpers/helpers";
 import { CarsInterface } from "../../../interfaces/interfaces";
@@ -29,7 +29,7 @@ const Cards: React.FC<Props<any>> = ({ name, model, brand, price, photo, id, adm
   };
   return (
     <>
-      <Card className=" p-2 m-1" style={{ width: "18rem" }}>
+      <Card as={Col} md={3} className=" p-2 m-1" style={{ width: "18rem" }}>
         {admin && (
           <div className="d-flex justify-content-end gap-3 mt-1 mb-3">
             <Link href={`/product/${id}/edit`}>

@@ -4,8 +4,16 @@ import Header from '../../../components/header/Header'
 import {Container, Row} from "react-bootstrap"
 import {UsersInterface} from "../../../interfaces/interfaces"
 import {AuthContext} from "../../../context/AuthProvider"
-import {NextPage} from "next"
+import {GetServerSideProps, NextPage} from "next"
 import CarsService from "../../../services/CarsService"
+import { getProtected } from "../../../services/auth"
+
+export const getSeverSideProps = (ctx: GetServerSideProps) => {
+   return getProtected(ctx, (index: any) => {
+     return { props: {} };
+   }, "admin");
+}
+
 
 const SignIn: NextPage = () => {
 

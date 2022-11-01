@@ -1,53 +1,56 @@
-import React, {createContext, useState, useEffect} from 'react'
-import {loginRequest, getToken, setToken} from "../helpers/auth"
-import {api} from "../services/api"
+import { useRouter } from "next/router";
+import React, { createContext, useState, useEffect, useContext } from "react";
+import { loginRequest, getToken, setToken } from "../services/auth";
+import { setCookie, parseCookies, destroyCookie } from "nookies";
+import { api } from "../services/api";
 
-
-interface Props{
-    children: React.ReactNode
+interface Props {
+  children: React.ReactNode;
 }
 
-interface AuthContextInterface{
-  isLogged: boolean
-  user: any
-  login: (email:string, password: string) => Promise<number> 
-  logout: () => void
+interface AuthContextInterface {
+  isLogged: boolean;
+  user: any;
+  login: (email: string, password: string) => Promise<number>;
+  logout: () => void;
 }
 
-export const AuthContext = createContext<AuthContextInterface>({} as AuthContextInterface)
+export const AuthContext = createContext<AuthContextInterface>({} as AuthContextInterface);
 
-const AuthProvider: React.FC<Props> = ({children}) => {
-  const [isLogged, setIsLogged] = useState<boolean>(false)
-  const [user, setUser] = useState(null)
+const AuthProvider: React.FC<Props> = ({ children }) => {
+  const [isLogged, setIsLogged] = useState<boolean>(false);
+  const [user, setUser] = useState<any>(null);
+  const route = useRouter();
 
-  const login = async(email:string, password:string): Promise<number> => { 
-    const data = await loginRequest(email, password)
-    
-    if(data){
-      setToken(data.data)
-      setIsLogged(true)
+  const login = async (email: string, password: string): Promise<number> => {
+    const data = await loginRequest(email, password);
+    if (data) {
+      setCookie(undefined, "user", JSON.stringify(data.data), {maxAge: 60*60*24}) //24horas
+      setIsLogged(true);
     }
-    return data.id
-  }
+    return data.id;
+  };
 
   const logout = () => {
-    setToken(null)
-    setIsLogged(false)
-  }
+    destroyCookie(undefined, "user")
+    setIsLogged(false);
+  };;
 
-  useEffect(()=> {
-    const user = getToken()
-    if(user){
-      setUser(user)
-      setIsLogged(true)
+  useEffect(() => {
+    const cookie = parseCookies()
+    let user;
+    if (cookie.user) {
+      user = JSON.parse(cookie.user);
     }
-  }, [isLogged])
+    if (cookie.user) {
+      setUser(user);
+      setIsLogged(true);
+    }
+  }, [isLogged]);
 
   return (
-   <AuthContext.Provider value={{isLogged, login, logout, user}}>
-    {children}
-   </AuthContext.Provider>
-  )
-}
+    <AuthContext.Provider value={{ isLogged, login, logout, user}}>{children}</AuthContext.Provider>
+  );
+};
 
-export default AuthProvider
+export default AuthProvider;
