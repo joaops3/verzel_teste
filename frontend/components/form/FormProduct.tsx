@@ -31,7 +31,7 @@ interface IUploadedFiles {
 }
 
 const FormProduct: React.FC<Props> = ({ operation, data }) => {
-  const [uploadedFiles, setUploadedFiles] = useState<IUploadedFiles[]>([]);
+  const [uploadedFiles, setUploadedFiles] = useState<IUploadedFiles[]>([])
   const route = useRouter();
   const {
     handleSubmit,
@@ -88,13 +88,15 @@ const FormProduct: React.FC<Props> = ({ operation, data }) => {
     cloneData.model = removeSpecialCharacters(cloneData.model);
 
     const formData = new FormData();
-    formData.append("photo", uploadedFiles[0].file);
+    
     formData.append("name", data.name);
     formData.append("model", cloneData.model);
     formData.append("brand", cloneData.brand);
     formData.append("price", cloneData.price);
 
     if (operation === "sign") {
+      formData.append("photo", uploadedFiles[0].file);
+      
       CarsService()
         .setCars(formData)
         .then((resp) => {

@@ -43,8 +43,8 @@ const LoginForm: React.FC = () => {
             <Col md={5} className="bg-login p-3">
           <Row className="text-center">   {error && <p className="errorsMessage">Email ou Senha Inválidos</p>}</Row>
               <Form.Group className="text-center fs-2" controlId="">
-                <Form.Label className="login-title">Email</Form.Label>
-                <Form.Control type="text" bsPrefix="custom-class" className="input" placeholder="Email" onChange={e => {setEmail(e.target.value)}}  onKeyDown={(e)=> {if(e.key ==="Enter")return handleLogin()}}></Form.Control>
+                <Form.Label className="login-title">Usuario</Form.Label>
+                <Form.Control type="text" bsPrefix="custom-class" className="input" placeholder="Usuario" onChange={e => {setEmail(e.target.value)}}  onKeyDown={(e)=> {if(e.key ==="Enter")return handleLogin()}}></Form.Control>
               </Form.Group>
               <Form.Group className="text-center fs-2 pt-2" controlId="">
                 <Form.Label className="login-title">Senha</Form.Label>
@@ -54,9 +54,11 @@ const LoginForm: React.FC = () => {
                 <a href="#" style={{color: "red"}}>Recuperar senha</a>
               
               </Form.Text>
-              <div style={{color: "blue"}}>   tester@email.com
+             <div style={{color: "blue"}}>Usuario:   client
                </div >
-               <div style={{color: "blue"}}> 123</div>
+               <div style={{color: "blue"}}>Usuario:   admin
+               </div >
+               <div style={{color: "blue"}}>Senha: 123</div>
               <Form.Group
                 as={Col}
                 sm={12}

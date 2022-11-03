@@ -25,7 +25,6 @@ api.interceptors.request.use(
     if (!user) {
       return config;
     }
-    console.log("dsds",user)
     if (config.headers) {
       config.headers.Authorization = `Bearer ${user.token}`;
       return config;
