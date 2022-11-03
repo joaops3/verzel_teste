@@ -1,17 +1,22 @@
 # verzel_teste
 
-# alterar env com dados do banco para acessar
 
-alterar onde fica root e password. O banco utilizado é  o mysql
+
+
+# Alterar env com dados do banco para acessar
+
+alterar na env do backend. Colocar usuario e senha, onde fica root e password. O banco utilizado é  o MYSQL
 
 DATABASE_URL="mysql://root:password@localhost:3306/verzel_teste"
 
-# rodar comando para criar banco e models
+# Rodar comando para criar banco e models
+Na pasta backend:
+
 npx prisma migrate dev 
 
-# INSERIR DADOS 
+# Inserir Dados 
 
-colocar o comando no banco para inserir os dados, para fazer testar no front-end
+colocar o comando no banco para inserir os dados, para poder testar no front-end
 
 INSERT INTO verzel_teste.users (id,name,password,admin,created_at) VALUES
 	 ('6a030289-5237-41e9-a7b0-9e8d0254e619','client','$2b$04$izAsWKnUOzX88wXKPR2cUOe6lNnhLgM3oTx/lUp37IywvjuT2SwnG',0,'2022-10-29 22:08:19.463000000'),
@@ -31,14 +36,14 @@ INSERT INTO verzel_teste.photos (url,carId) VALUES
 	 ('photo1667158856399.jpg','96929583-6e28-4886-bee3-77794a838e43'),
 	 ('photo1667158962456.webp','49c7ae64-f4dd-4bde-a795-3bd7b291e4ca'); 
 
-# rodar back-end
+# Rodar back-end
 
 Para rodar o backend utilizar o comando:
 
-npm run dev
+npm start
 
-# rodar frontend 
+# Rodar frontend 
 
-Para rodar o frontend utilziar o comando:
+Para rodar o frontend utilizar o comando:
 
 npm run dev
