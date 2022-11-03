@@ -1,22 +1,19 @@
 # verzel_teste
 
 
-
-
 # Alterar env com dados do banco para acessar
 
 alterar na env do backend. Colocar usuario e senha, onde fica root e password. O banco utilizado é  o MYSQL
 
 DATABASE_URL="mysql://root:password@localhost:3306/verzel_teste"
 
-# Rodar comando para criar banco e models
+# Rodar comando para criar banco, models e inserir dados
 Na pasta backend:
 
-npx prisma migrate dev 
+npx prisma migrate dev
 
-# Inserir Dados 
-
-colocar o comando no banco para inserir os dados, para poder testar no front-end
+O banco já vem populado.
+mas se precisar colocar dados na mão:
 
 INSERT INTO verzel_teste.users (id,name,password,admin,created_at) VALUES
 	 ('6a030289-5237-41e9-a7b0-9e8d0254e619','client','$2b$04$izAsWKnUOzX88wXKPR2cUOe6lNnhLgM3oTx/lUp37IywvjuT2SwnG',0,'2022-10-29 22:08:19.463000000'),
