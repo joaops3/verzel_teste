@@ -2,6 +2,7 @@ import db from "../database/db";
 import { IUser } from "../interfaces/interfaces"
 import bcrypt from "bcrypt";
 import { generateToken } from "../utils/helpers"
+import { AppError } from "../errors/AppError";
 
 class UserService {
   async findAll() {
@@ -18,6 +19,10 @@ class UserService {
   }
 
   async create(createUser: IUser) {
+    const checkUser = await db.user.findFirst({where: {name: createUser.name}})
+    if(checkUser){
+      return 
+    }
     const salt = await bcrypt.genSalt(1);
     const hash = await bcrypt.hash(createUser.password, salt);
     createUser.password = hash

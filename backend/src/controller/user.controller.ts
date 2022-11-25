@@ -28,7 +28,10 @@ class UserController {
     if (!password) {
       return res.status(400).json({message: "password required" });
     }
-    const user = await userService.create({ name, password, admin });
+    const user = await userService.create({ name, password, admin })
+    if(!user){
+      return res.status(400).json({ message: "user already exists" });
+    }
     res.status(201).json({ data: {token: user.token, admin: user.admin} });
   }
 

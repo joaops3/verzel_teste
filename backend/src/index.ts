@@ -1,9 +1,11 @@
-import express, {Request, Response, ErrorRequestHandler} from "express"
+import express, {Request, Response, ErrorRequestHandler, response} from "express"
+import "express-async-errors";
 import path from "path"
 import userRoutes from "./route/userRoutes"
 import carRoutes from "./route/carRoutes"
 import cors from "cors"
 import dotenv from "dotenv"
+import { AppError } from "./errors/AppError"
 
 
 dotenv.config()
@@ -25,15 +27,18 @@ server.use((req: Request, res: Response) => {
 
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
+  if(err instanceof AppError){
+    return res.status(err.statusCode).json({message: err.message})
+  }
   if (err.status) {
     res.status(err.status);
   } else {
-    res.status(400);
+    res.status(500);
   }
   if (err.message) {
     res.json({ message: err.message });
   } else {
-    res.json({ message: "bad request" });
+    res.json({ message: `Internal server error ${err}` });
   }
 };
 server.use(errorHandler);
