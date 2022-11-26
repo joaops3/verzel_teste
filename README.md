@@ -1,46 +1,131 @@
-# verzel_teste
+<div align="center"> 
+ <img align="center" alt="tech" width="40" height="40" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" /> 
+ <img align="center" alt="tech" width="40" height="40" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-line.svg" />
+            
+</div>
+
+<h3 align="center">Teste verzel Desenvolvedor FullStack</h3>
+
+---
+
+## Sumário
+
+- [Regras de negocio](#regra)
+- [Backend](#backend)
+	- [Tecnologias](#tecnologias_back)
+	- [Diagrama](#diagrama)
+	- [Rotas](#rotas)
+- [Frontend](#frontend)
+	- [Tecnologias](#tecnologias_front)
+	- [Funcionamento](#funcionamento_front)
+- [Executar Projeto](#executar)
+
+## Regras de Negocio <a name = "regra"></a>
+Desenvolver um sistema com catálogo de veículos a venda.
+- Homepage exibindo os veículos
+- Os veiculos devem estar osdenados por ordem de valor
+- Para cadastros de veículos devera ter login administrativo com token JWT
+- Todas as requisições privadas precisam de um token JWT valido
+- Atributos obrigatorios para veículos são: id, nome, marca modelo, foto
+- O backend devera ser uma API Rest
+- Todos os dados devem ser persistidos em banco de dados
 
 
-# Alterar env com dados do banco para acessar
+## BackEnd<a name = "backend"></a>
+### Tech utilizada: <a name = "tecnologias_back"></a>
 
-alterar na env do backend. Colocar usuario e senha, onde fica root e password. O banco utilizado é  o MYSQL
+- node 16.17.0
+- express
+- passport - jwt 
+- jsonWebToken
+- Multer
+- Prisma
+- mySQL
+
+### Diagrama:
+
+Foi utilizado como bando de dados o mySQL, e o Prisma como ORM.
+O projeto possui 3 models, sendo elas user, car, photo. Podendo ser visto com mais detalhes no diagrama abaixo: 
+
+<img src="./backend/public/diagrama_bd.png">
+
+### Rotas <a name = "rotas"></a>
+<p>O projeto é dividido nas seguintes rotas:</p>
+
+**/car**: 
+<p>Para utilizar as rotas de POST, UPDATE, DELETE é necessario que o user seja admin e fornecer token JWT valido.Campos Post: name, model, brand, price, Photo </p>
+
+- /car (GET, POST)
+- /car/:id (GET, UPDATE, DELETE)
+
+
+
+**/user**:
+<p>Para utilizar as rotas de POST, UPDATE, DELETE é necessario fornecer token JWT valido. Campos Post: name, password, admin?:boolean </p>
+
+
+- /user (GET, POST)
+- /user/:id (GET, UPDATE, DELETE)
+
+
+
+**/login**:
+
+- /login (POST)
+
+As rotas podem ser testadas utilizando a interface gráfica do frontend. O projeto tambem acompanha um esquema das rotas que pode ser utilizado no postman
+
+## FrontEnd <a name = "frontend"></a>
+
+### Principais lib utilizadas: <a name = "tecnologias_front"></a>
+
+- node 16.17.0
+- Next
+- scss
+- Bootsrap React
+- React Hook Forms
+
+## Funcionamento <a name = "funcionamento_front"></a>
+
+**Estrutura do Projeto:**
+
+- `./pages`: É a páginas e rotas do projeto
+- `./components`: Todos os componentes e utilizados nas páginas
+- `./services`: Custom Hooks, que possui funções responsaveis por armazenar as rotas e interargir com a API
+- `./context`: Provedores de contexto da aplicação, neste caso temos somente o AuthProvider
+- `./styles`: Onde fica todos os stilos da aplicação,  temos o arquivo _app que importa todos os outros arquivos e globals responsavel por importar o _app e os styles globais
+	-  `./styles/components`: Onde fica todos os stilos utilizados nos components.
+- `./helpers`: Onde fica todas as funções e arquivos de ajuda, como por exemplo funções responsaveis por colocar maskara.
+
+
+**Projeto em execução:**
+
+<div > 
+<img align="center" alt="tech" width="300" height="250" src="./backend/public/listagem" /> 
+<img align="center" alt="tech" width="300" height="250" src="./backend/public/edicao" />
+<img align="center" alt="tech" width="300" height="250" src="./backend/public/login" />
+</ div>
+
+
+## Como executar Projeto ? <a name = "executar"></a>
+
+#### Alterar env com dados do banco para acessar
+
+Alterar na env do backend. Colocar usuario e senha, onde fica root e password. O banco utilizado é  o MYSQL
 
 DATABASE_URL="mysql://root:password@localhost:3306/verzel_teste"
 
-# Rodar comando para criar banco, models e inserir dados
-Na pasta backend:
 
-npx prisma migrate dev
+#### Rodar Backend
 
-O banco já vem populado.
-mas se precisar colocar dados na mão:
+- executar npx prisma migrate dev (Para criar banco, models e popular)
+- npm start, para executar backend
 
-INSERT INTO verzel_teste.users (id,name,password,admin,created_at) VALUES
-	 ('6a030289-5237-41e9-a7b0-9e8d0254e619','client','$2b$04$izAsWKnUOzX88wXKPR2cUOe6lNnhLgM3oTx/lUp37IywvjuT2SwnG',0,'2022-10-29 22:08:19.463000000'),
-	 ('8ac4c400-bb6a-4d0d-8da2-ae0f4b2f008f','admin','$2b$04$EL2B4W9KgQ1uiu2UgppeB.KMpcdHQokmoHeeUsM2B1.bXzBJthyIK',1,'2022-10-29 22:08:43.734000000');
-
-
-
-INSERT INTO verzel_teste.cars (id,name,model,brand,price) VALUES
-	 ('49c7ae64-f4dd-4bde-a795-3bd7b291e4ca','onix','2016','gm',30000),
-	 ('8e3c7a62-e71c-42f8-8055-545b674e8a4d','Ka','2020','Ford',50000),
-	 ('96929583-6e28-4886-bee3-77794a838e43','civic','2018','honda',70000),
-	 ('e5bc8ed9-b583-46e3-a744-163adeb9b5ca','Clio','2020','renault',10000);
-
-INSERT INTO verzel_teste.photos (url,carId) VALUES
-	 ('photo1667174258766.jpg','e5bc8ed9-b583-46e3-a744-163adeb9b5ca'),
-	 ('photo1667158522505.jpg','8e3c7a62-e71c-42f8-8055-545b674e8a4d'),
-	 ('photo1667158856399.jpg','96929583-6e28-4886-bee3-77794a838e43'),
-	 ('photo1667158962456.webp','49c7ae64-f4dd-4bde-a795-3bd7b291e4ca'); 
-
-# Rodar back-end
-
-Para rodar o backend utilizar o comando:
-
-npm start
-
+#### Rodar Frontend
 # Rodar frontend 
 
 Para rodar o frontend utilizar o comando:
 
-npm run dev
+- npm run dev
+- O banco possui 2 usuarios pre-cadastrados para teste; usuario: admin, client; senha: 123
+- Apenas o admin pode incluir, alterar, excluir produtos.
