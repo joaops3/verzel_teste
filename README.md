@@ -47,7 +47,7 @@ Desenvolver um sistema com catálogo de veículos a venda.
 Foi utilizado como bando de dados o mySQL, e o Prisma como ORM.
 O projeto possui 3 models, sendo elas user, car, photo. Podendo ser visto com mais detalhes no diagrama abaixo: 
 
-<img src="./backend/public/diagrama_bd.png">
+<img src="backend/public/diagrama_bd.PNG">
 
 ### Rotas <a name = "rotas"></a>
 <p>O projeto é dividido nas seguintes rotas:</p>
@@ -101,9 +101,9 @@ As rotas podem ser testadas utilizando a interface gráfica do frontend. O proje
 **Projeto em execução:**
 
 <div > 
-<img align="center" alt="tech" width="300" height="250" src="./backend/public/listagem" /> 
-<img align="center" alt="tech" width="300" height="250" src="./backend/public/edicao" />
-<img align="center" alt="tech" width="300" height="250" src="./backend/public/login" />
+<img align="center" alt="tech" width="320" height="250" src="backend/public/listagem.PNG" /> 
+<img align="center" alt="tech" width="320" height="250" src="backend/public/edicao.PNG" />
+<img align="center" alt="tech" width="320" height="250" src="backend/public/login.PNG" />
 </ div>
 
 
@@ -111,14 +111,13 @@ As rotas podem ser testadas utilizando a interface gráfica do frontend. O proje
 
 #### Alterar env com dados do banco para acessar
 
-Alterar na env do backend. Colocar usuario e senha, onde fica root e password. O banco utilizado é  o MYSQL
-
-DATABASE_URL="mysql://root:password@localhost:3306/verzel_teste"
+- Alterar na env do backend. Colocar usuario e senha, onde fica root e password. O banco utilizado é  o MYSQL
+- DATABASE_URL="mysql://root:password@localhost:3306/verzel_teste"
 
 
 #### Rodar Backend
 
-- executar npx prisma migrate dev (Para criar banco, models e popular)
+- Executar npx prisma migrate dev (Para criar banco, models e popular)
 - npm start, para executar backend
 
 #### Rodar Frontend
