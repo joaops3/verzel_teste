@@ -23,16 +23,16 @@
 ## Regras de Negocio <a name = "regra"></a>
 Desenvolver um sistema com catálogo de veículos a venda.
 - Homepage exibindo os veículos
-- Os veiculos devem estar osdenados por ordem de valor
+- Os veiculos devem estar ordenados por ordem de valor
 - Para cadastros de veículos devera ter login administrativo com token JWT
 - Todas as requisições privadas precisam de um token JWT valido
-- Atributos obrigatorios para veículos são: id, nome, marca modelo, foto
+- Atributos obrigatórios para veículos são: id, nome, marca modelo, foto
 - O backend devera ser uma API Rest
 - Todos os dados devem ser persistidos em banco de dados
 
 
 ## BackEnd<a name = "backend"></a>
-### Tech utilizada: <a name = "tecnologias_back"></a>
+### lib's utilizadas: <a name = "tecnologias_back"></a>
 
 - node 16.17.0
 - express
@@ -53,7 +53,7 @@ O projeto possui 3 models, sendo elas user, car, photo. Podendo ser visto com ma
 <p>O projeto é dividido nas seguintes rotas:</p>
 
 **/car**: 
-<p>Para utilizar as rotas de POST, UPDATE, DELETE é necessario que o user seja admin e fornecer token JWT valido.Campos Post: name, model, brand, price, Photo </p>
+<p>Para utilizar as rotas de POST, UPDATE, DELETE é necessário que o user seja admin e fornecer token JWT valido.Campos POST: name, model, brand, price, photo? </p>
 
 - /car (GET, POST)
 - /car/:id (GET, UPDATE, DELETE)
@@ -61,7 +61,7 @@ O projeto possui 3 models, sendo elas user, car, photo. Podendo ser visto com ma
 
 
 **/user**:
-<p>Para utilizar as rotas de POST, UPDATE, DELETE é necessario fornecer token JWT valido. Campos Post: name, password, admin?:boolean </p>
+<p>Para utilizar as rotas de POST, UPDATE, DELETE é necessário fornecer token JWT valido. Campos POST: name, password, admin?:boolean </p>
 
 
 - /user (GET, POST)
@@ -73,11 +73,11 @@ O projeto possui 3 models, sendo elas user, car, photo. Podendo ser visto com ma
 
 - /login (POST)
 
-As rotas podem ser testadas utilizando a interface gráfica do frontend. O projeto tambem acompanha um esquema das rotas que pode ser utilizado no postman
+As rotas podem ser testadas utilizando a interface gráfica do frontend. O projeto tambem acompanha um esquema das rotas que pode ser utilizado no postman.
 
 ## FrontEnd <a name = "frontend"></a>
 
-### Principais lib utilizadas: <a name = "tecnologias_front"></a>
+### lib's utilizadas: <a name = "tecnologias_front"></a>
 
 - node 16.17.0
 - Next
@@ -100,11 +100,12 @@ As rotas podem ser testadas utilizando a interface gráfica do frontend. O proje
 
 **Projeto em execução:**
 
-<div > 
+<div> 
 <img align="center" alt="tech" width="320" height="250" src="backend/public/listagem.PNG" /> 
 <img align="center" alt="tech" width="320" height="250" src="backend/public/edicao.PNG" />
 <img align="center" alt="tech" width="320" height="250" src="backend/public/login.PNG" />
-</ div>
+
+</div>
 
 
 ## Como executar Projeto ? <a name = "executar"></a>
@@ -121,10 +122,9 @@ As rotas podem ser testadas utilizando a interface gráfica do frontend. O proje
 - npm start, para executar backend
 
 #### Rodar Frontend
-# Rodar frontend 
 
 Para rodar o frontend utilizar o comando:
 
 - npm run dev
-- O banco possui 2 usuarios pre-cadastrados para teste; usuario: admin, client; senha: 123
+- O banco possui 2 usuarios pré-cadastrados para teste; usuario: admin, client; senha: 123
 - Apenas o admin pode incluir, alterar, excluir produtos.
