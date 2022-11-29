@@ -44,7 +44,7 @@ Desenvolver um sistema com catálogo de veículos a venda.
 
 ### Diagrama:
 
-Foi utilizado como bando de dados o mySQL, e o Prisma como ORM.
+Foi utilizado como bando de dados o mySQL e o Prisma como ORM.
 O projeto possui 3 models, sendo elas user, car, photo. Podendo ser visto com mais detalhes no diagrama abaixo: 
 
 <img src="backend/public/diagrama_bd.PNG">
