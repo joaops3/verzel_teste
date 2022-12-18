@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+
+  db:
+    image: mysql
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: verzel_teste
+    ports:
+      - 8000:3306
+  app:
+    build: .
+    ports:
+      - 4000:4000
+    command: sh -c "npx prisma migrate dev && npx prisma db seed && npm start"
+    env_file:
+      - .env
